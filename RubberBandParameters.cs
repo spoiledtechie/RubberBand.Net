@@ -14,7 +14,8 @@ namespace RubberBandNet
         public string VideoCodec;
         public string AudioCodec;
         public string Format;
-        public bool DisableAudio;
+
+        public string Pitch;
 
         public string ComplexVideoFilterInputs;
         public string ComplexVideoFilterCommands;
@@ -48,6 +49,7 @@ namespace RubberBandNet
             AddOption(option);
             m_assembledOptions.Append(" ");
             AddParameter(parameter);
+            m_assembledOptions.Append(" ");
         }
         protected void AddComplexOption(string option, string inputs, string commands)
         {
@@ -126,6 +128,11 @@ namespace RubberBandNet
                 AddOption("f", Format);
             }
 
+            if (!String.IsNullOrWhiteSpace(Pitch))
+            {
+                AddOption("p", Pitch);
+            }
+
 
             if (!String.IsNullOrWhiteSpace(Preset))
             {
@@ -133,10 +140,6 @@ namespace RubberBandNet
             }
 
 
-            if (DisableAudio)
-            {
-                AddOption("an");
-            }
 
             if (!String.IsNullOrWhiteSpace(OutputOptions))
             {
@@ -151,12 +154,14 @@ namespace RubberBandNet
             m_assembledOptions.Clear();
             AssembleGeneralOptions();
             AssembleInputOptions();
-            if (!String.IsNullOrWhiteSpace(InputFilePath))
-            {
-                AddOption("i", String.Format("\"{0}\"", InputFilePath));
-            }
+
 
             AssembleOutputOptions();
+
+            if (!String.IsNullOrWhiteSpace(InputFilePath))
+            {
+                AddParameter(String.Format("\"{0}\"", InputFilePath));
+            }
 
             AssembleComplexOutputOptions();
 
