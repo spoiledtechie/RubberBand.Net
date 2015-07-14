@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
+using System.Reflection;
 
 namespace RubberBandNet
 {
@@ -17,7 +18,13 @@ namespace RubberBandNet
 
         static RubberBandService()
         {
-            RubberBandExecutableFilePath = Environment.CurrentDirectory + ConfigurationManager.AppSettings["RubberBandExecutableFilePath"];
+            var currentAssembly = Assembly.GetEntryAssembly();
+            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
+            if (currentDirectory == null)
+                return;
+
+            RubberBandExecutableFilePath = currentDirectory + ConfigurationManager.AppSettings["RubberBandExecutableFilePath"];
+
         }
 
 
